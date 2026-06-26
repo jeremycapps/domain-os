@@ -1,0 +1,58 @@
+version: 1
+
+binding:
+  description: Connects Libera motion to domain semantics.
+  required:
+    - id
+    - domain
+    - libera
+    - type
+  fields:
+    id:
+      type: string
+    domain:
+      type: string
+    libera:
+      type: object
+      required:
+        - pressure
+        - operation
+        - slot
+      fields:
+        pressure:
+          type: enum
+          values:
+            - boundary
+            - movement
+            - exception
+        operation:
+          type: enum
+          values:
+            - enter
+            - exit
+            - advance
+            - change
+            - detect
+            - respond
+        slot:
+          type: string
+    type:
+      type: string
+      description: Domain-specific type, such as schema_change, customer_request, model_delta, validation, or clearance_violation.
+    execution:
+      type: object
+      description: Operational interpretation of the bound Libera motion.
+    meaning:
+      type: object
+      description: Contextual significance of the bound Libera motion.
+    route_defaults:
+      type: list
+      description: Optional default active-use routes for Facia.
+
+boundaries:
+  - Domain owns semantic binding.
+  - Domain may define execution and meaning interpretation.
+  - Domain may define domain types.
+  - Domain does not record moments.
+  - Domain does not evaluate objective satisfaction.
+  - Domain does not render active use surfaces.
