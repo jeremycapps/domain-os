@@ -1,0 +1,39 @@
+domain:
+  id: domain.protocol_design
+
+bindings:
+  - id: binding.facia_surface_model_change
+    domain: domain.protocol_design
+
+    libera:
+      pressure: movement
+      operation: change
+      slot: facia_surface_model.status
+
+    type: schema_change
+
+    execution:
+      object: facia_schema
+      action: replace_surface_model
+      expected: coordinate_implement_verify
+
+    meaning:
+      why: Facia should own use, not duplicate Libera pressure or domain type.
+      for:
+        - context_rebuild_agent
+        - future_repo_maintainer
+      value: reduces_protocol_drift
+
+    route_defaults:
+      - when:
+          status: unsatisfied
+        use: implement
+      - when:
+          status: satisfied
+          downstream:
+            requires_review: true
+        use: verify
+      - when:
+          status: satisfied
+          downstream: none
+        use: complete
